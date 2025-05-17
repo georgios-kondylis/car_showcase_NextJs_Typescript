@@ -22,3 +22,41 @@ export async function fetchCars(filters: FilterProps) {
 
   return result;
 }
+
+export const calculateCarRent = (
+  city_mpg: number,
+  year: number,
+  make: string,
+  carClass: string
+) => {
+  const basePrice = 30; // Lower base to give room for variation
+  const currentYear = new Date().getFullYear();
+  const carAge = currentYear - year;
+
+  const mileageRate = (40 - city_mpg) * 0.5; // Higher cost for lower mpg
+  const ageRate = carAge * -0.3;  // Age discount — older cars are cheaper
+
+  const brandMultiplier: Record<string, number> = {  // Brand multipliers (rough examples)
+    ferrari: 4,
+    lamborghini: 4,
+    bmw: 1.8,
+    mercedes: 1.8,
+    audi: 1.7,
+    toyota: 1,
+    honda: 1,
+    ford: 1,
+    mitsubishi: 0.9,
+    hyundai: 0.9,
+    kia: 0.9,
+  };
+
+  const brandKey = make.toLowerCase();
+  const multiplier = brandMultiplier[brandKey] || 1;
+
+  const classAdjustment = carClass.toLowerCase().includes("sports") ? 1.5 : 1;
+
+  const rate = (basePrice + mileageRate + ageRate) * multiplier * classAdjustment;
+
+  const finalRate = Math.max(rate, 20); // Prevent too-low values
+  return finalRate.toFixed(0);
+};

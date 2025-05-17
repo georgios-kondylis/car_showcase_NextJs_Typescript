@@ -1,18 +1,9 @@
-import Hero from "@/components/Hero";
-import SearchBar from "@/components/SearchBar";
-import CustomFilter from "@/components/CustomFilter";
 import { fetchCars } from "@/utils";
 import { HomeProps } from "@/Types";
 import { cars } from "@/constants/carsDB";
+import { Hero, CarCard, SearchBar, CustomFilter } from "@/components/ExportComponents";
 
 export default async function Home({searchParams} :HomeProps ) {
-  // const allCars = await fetchCars({
-  //   manufacturer: searchParams.manufacturer || "",
-  //   year: searchParams.year || 2022,
-  //   fuel: searchParams.fuel || "",
-  //   limit: searchParams.limit || 10,
-  //   model: searchParams.model || "",
-  // });
   const allCars = cars;
   console.log(allCars.length)
 
@@ -40,23 +31,15 @@ export default async function Home({searchParams} :HomeProps ) {
         {!isDataEmpty ? (
           <section>
            <div className='home__cars-wrapper'>
-              {allCars?.map((car, i) => {
-
-                return(
-                // <CarCard car={car} />
-                <div key={i} className="flex">
-                  <p>{car.make}</p>
-                  <p>{car.model}</p>
-                  <img className="w-[170px]" src={car?.image} alt="" />
-                </div>
-               
-              )})}
+              {allCars?.map((car, i) => (
+                <CarCard key={i} car={car} />
+              ))}
             </div>
           </section>
         ) : (
           <div className='home__error-container'>
             <h2 className='text-black text-xl font-bold'>Oops, no results</h2>
-            <p>{allCars?.message}</p>
+            {/* <p>{allCars?.message}</p> */}
           </div>
         )}
 
